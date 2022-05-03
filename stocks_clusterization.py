@@ -45,8 +45,6 @@ def remove_degenerate_clusters(labels_dict, centroids, data):
     for cluster_number in reverted_dict:
         if reverted_dict[cluster_number] < 10:
             clusters_to_remove.append(cluster_number)
-    #print(reverted_dict)
-    print("Removing these clusters:", clusters_to_remove)
 
     for idx in labels_dict:
         if labels_dict[idx] in clusters_to_remove:
@@ -84,10 +82,7 @@ def split_clusters(labels_dict, data, indexes):
     proba = min(ones_n, zeros_n) / max(ones_n, zeros_n)
 
     coin = np.random.binomial(1, proba, 1)[0]
-    print(proba)
     if coin:
-        print('Splitting')
-        print(largest_label, reverted_dict)
         for i in range(len(current_ids)):
             ID = current_ids[i]
             if new_labels[i] == 0:
@@ -290,6 +285,7 @@ if __name__ == '__main__':
                         required=True,
                         help="write report to FILE", metavar="FILE")
     args = parser.parse_args()
+    print("Starting.")
     filename = str(args.myFilenameVariable)
 
     df_old = pd.read_csv(filename)
@@ -297,11 +293,13 @@ if __name__ == '__main__':
     df = df_old.drop(['level_0', 'level_1', 'level_2', 'level_3'], axis=1)
 
     work = Clusterisation(df, df.loc[0, 'date'], 30) # 30 can be changed to any other time delta
-    
+    print("Data readed.")
     work.set_clusterisation()
+    print("Initial clusterisation set.")
     work.progress_clusterisation()
-
+    print("All the clustering done.")
     work.set_final_df()
     final_dataframe = work.get_final_df()
 
     final_dataframe.to_csv('clusters_' + filename, index=False)
+    print("Finished.")
