@@ -301,5 +301,6 @@ if __name__ == '__main__':
     work.set_final_df()
     final_dataframe = work.get_final_df()
 
-    final_dataframe.to_csv('clusters_' + filename, index=False)
+    filename_new = filename[:-4] + '_clusters.csv'
+    final_dataframe.to_csv(filename_new, index=False)
     print("Finished.")
